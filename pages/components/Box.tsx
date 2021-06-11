@@ -3,7 +3,8 @@ import style from './Box.module.css';
 
 interface BoxProperty {
     index: number;
-    value: number
+    value: number;
+    matchComplete: boolean;
     changeFunc(index): void;
 }
 
@@ -11,20 +12,23 @@ class Box extends React.Component<BoxProperty> {
     state = {
         value: this.props.value
     };
-    constructor(props){
+    constructor(props) {
         super(props);
     }
 
     setSelectedBox = (() => {
-        const i = this.props.index;
-        this.props.changeFunc({index: i})
+        if (this.props.value === null && !this.props.matchComplete) {
+            const i = this.props.index;
+            this.props.changeFunc({ index: i })
+        }
     })
-    render() { 
+    render() {
         return (
-            <div 
+            <div
                 onClick={() => this.setSelectedBox()}
-                className={style.box}
-            >{this.props.value}</div>
+                className={`${style.box} ${this.props.value === null ? '' : style.disabled}`}>
+                {this.props.value}
+            </div>
         )
     }
 }
